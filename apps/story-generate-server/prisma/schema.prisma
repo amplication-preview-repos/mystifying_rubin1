@@ -1,0 +1,47 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DB_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Story {
+  id         String    @id @default(cuid())
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  title      String?
+  content    String?
+  image      Json?
+  category   Category? @relation(fields: [categoryId], references: [id])
+  categoryId String?
+  ageGroup   AgeGroup? @relation(fields: [ageGroupId], references: [id])
+  ageGroupId String?
+  genre      Genre?    @relation(fields: [genreId], references: [id])
+  genreId    String?
+}
+
+model Category {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  name      String?
+  stories   Story[]
+}
+
+model Genre {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  name      String?
+  stories   Story[]
+}
+
+model AgeGroup {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  name      String?
+  stories   Story[]
+}
